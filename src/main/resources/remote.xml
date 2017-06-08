@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
+            http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd">
+
+    <jaxrs:server id="remoteContainer" address="/apiExample">
+        <jaxrs:serviceBeans>
+            <ref bean="customerRemoteImpl" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+                <property name="dropRootElement" value="true" />
+            </bean>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <mongo:db-factory id="mongoDbFactory" host="${mongo.host}" port="${mongo.port}" dbname="${mongo.dbname}" username="${mongo.username}" password="${mongo.password}"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
+
+
+    <bean id="refApiMongoDao" class="com.fbellotti.api_ws_spring.dao.RefApiMongoDao">
+        <constructor-arg name="mongoTemplate" ref="mongoTemplate" />
+        <constructor-arg name="genericType" >
+        	<value type="java.lang.Class">test.model.Customer</value>
+        </constructor-arg>
+        <constructor-arg name="acceptRange" value="1000" />
+    </bean>
+
+
+    <bean id="customerRemoteImpl" class="test.remote.CustomerRemoteImpl">
+        <constructor-arg name="daoRef" ref="refApiMongoDao" />
+    </bean>
+
+</beans>
