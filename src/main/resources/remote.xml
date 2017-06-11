@@ -14,7 +14,13 @@
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-                <property name="dropRootElement" value="true" />
+                <property name="convertTypesToStrings" value="true"/>
+                <property name="serializeAsArray" value="true"/>
+                <property name="arrayKeys">
+                    <list>
+                        <value>com.fbellotti.api_ws_spring.example.model.Customer</value>
+                    </list>
+                </property>
             </bean>
         </jaxrs:providers>
     </jaxrs:server>
@@ -29,14 +35,22 @@
     <bean id="refApiMongoDao" class="com.fbellotti.api_ws_spring.dao.RefApiMongoDao">
         <constructor-arg name="mongoTemplate" ref="mongoTemplate" />
         <constructor-arg name="genericType" >
-        	<value type="java.lang.Class">test.model.Customer</value>
+        	<value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
         </constructor-arg>
         <constructor-arg name="acceptRange" value="1000" />
     </bean>
 
 
-    <bean id="customerRemoteImpl" class="test.remote.CustomerRemoteImpl">
+    <bean id="customerRemoteImpl" class="com.fbellotti.api_ws_spring.example.remote.CustomerRemoteImpl">
         <constructor-arg name="daoRef" ref="refApiMongoDao" />
+    </bean>
+
+    <bean id="jaxbContext" class="javax.xml.bind.JAXBContext" factory-method="newInstance">
+        <constructor-arg name="classesToBeBound" >
+            <list>
+                <value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
+            </list>
+        </constructor-arg>
     </bean>
 
 </beans>

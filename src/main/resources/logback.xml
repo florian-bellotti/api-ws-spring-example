@@ -11,7 +11,7 @@
 
 	<appender name="FILE-AUDIT"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>./caroll_keybuild.log</file>
+		<file>./api.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			 <pattern>
 			 	%d{yyyy-MM-dd HH:mm:ss}  %-5level %logger{35} %line - %msg%n
@@ -20,7 +20,7 @@
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- rollover daily -->
-			<fileNamePattern>./caroll_keybuild.%d{yyyy-MM-dd}.%i.log
+			<fileNamePattern>./api.%d{yyyy-MM-dd}.%i.log
                         </fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy
 				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -29,7 +29,7 @@
 
 	</appender>
 	
-	<logger name="com.keyneosoft" level="debug"
+	<logger name="com.fbellotti" level="debug"
 		additivity="false">
 		<appender-ref ref="FILE-AUDIT" />
 		<appender-ref ref="STDOUT" />

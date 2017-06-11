@@ -1,19 +1,19 @@
-package test.model;
+package com.fbellotti.api_ws_spring.example.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 /**
  * @author <a href="http://fbellotti.com">Florian BELLOTTI</a>
  */
-@XmlRootElement(name="Customer")
+@XmlRootElement(name="customer")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Customer {
 
   private String firstName;
   private String lastName;
   private Address address;
+
+  public Customer() {}
 
   public Customer(String firstName, String lastName, Address address) {
     this.firstName = firstName;
