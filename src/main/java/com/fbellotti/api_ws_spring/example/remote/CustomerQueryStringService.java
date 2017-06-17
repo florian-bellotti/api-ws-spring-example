@@ -1,6 +1,7 @@
 package com.fbellotti.api_ws_spring.example.remote;
 
-import com.fbellotti.api_ws_spring.remote.RefApiRemote;
+
+import com.fbellotti.api_ws_spring.remote.QueryStringService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -13,5 +14,5 @@ import javax.ws.rs.core.MediaType;
 @Path("/customer")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface CustomerRemote extends RefApiRemote {
+public interface CustomerQueryStringService extends QueryStringService {
 }

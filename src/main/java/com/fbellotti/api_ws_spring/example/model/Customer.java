@@ -1,5 +1,7 @@
 package com.fbellotti.api_ws_spring.example.model;
 
+import org.springframework.data.annotation.Id;
+
 import javax.xml.bind.annotation.*;
 
 /**
@@ -9,6 +11,8 @@ import javax.xml.bind.annotation.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Customer {
 
+  @Id
+  private String identifier;
   private String firstName;
   private String lastName;
   private Address address;
@@ -33,4 +37,7 @@ public class Customer {
     return address;
   }
 
+  public String getIdentifier() {
+    return identifier;
+  }
 }

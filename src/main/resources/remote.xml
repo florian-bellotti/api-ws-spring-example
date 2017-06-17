@@ -10,7 +10,8 @@
 
     <jaxrs:server id="remoteContainer" address="/apiExample">
         <jaxrs:serviceBeans>
-            <ref bean="customerRemoteImpl" />
+            <ref bean="customerQueryStringService" />
+            <ref bean="customerCrudService" />
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
@@ -18,7 +19,7 @@
                 <property name="serializeAsArray" value="true"/>
                 <property name="arrayKeys">
                     <list>
-                        <value>com.fbellotti.api_ws_spring.example.model.Customer</value>
+                        <value>customer</value>
                     </list>
                 </property>
             </bean>
@@ -27,30 +28,35 @@
 
     <mongo:db-factory id="mongoDbFactory" host="${mongo.host}" port="${mongo.port}" dbname="${mongo.dbname}" username="${mongo.username}" password="${mongo.password}"/>
 
+    <!-- Database section -->
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
     </bean>
 
-
-    <bean id="refApiMongoDao" class="com.fbellotti.api_ws_spring.dao.RefApiMongoDao">
+    <bean id="customerQueryStringMongoDao" class="com.fbellotti.api_ws_spring.dao.QueryStringMongoDao">
         <constructor-arg name="mongoTemplate" ref="mongoTemplate" />
         <constructor-arg name="genericType" >
-        	<value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
+            <value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
         </constructor-arg>
         <constructor-arg name="acceptRange" value="1000" />
     </bean>
 
-
-    <bean id="customerRemoteImpl" class="com.fbellotti.api_ws_spring.example.remote.CustomerRemoteImpl">
-        <constructor-arg name="daoRef" ref="refApiMongoDao" />
+    <bean id="customerCrudMongoDao" class="com.fbellotti.api_ws_spring.dao.CrudMongoDao">
+        <constructor-arg name="mongoTemplate" ref="mongoTemplate" />
+        <constructor-arg name="genericType" >
+            <value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
+        </constructor-arg>
+        <constructor-arg name="idField" value="identifier" />
     </bean>
 
-    <bean id="jaxbContext" class="javax.xml.bind.JAXBContext" factory-method="newInstance">
-        <constructor-arg name="classesToBeBound" >
-            <list>
-                <value type="java.lang.Class">com.fbellotti.api_ws_spring.example.model.Customer</value>
-            </list>
-        </constructor-arg>
+
+    <!-- Service section -->
+    <bean id="customerQueryStringService" class="com.fbellotti.api_ws_spring.example.remote.CustomerQueryStringServiceImpl">
+        <constructor-arg name="daoQueryString" ref="customerQueryStringMongoDao" />
+    </bean>
+
+    <bean id="customerCrudService" class="com.fbellotti.api_ws_spring.example.remote.CustomerCrudServiceImpl">
+        <constructor-arg name="daoCrud" ref="customerCrudMongoDao" />
     </bean>
 
 </beans>
